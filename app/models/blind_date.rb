@@ -1,6 +1,7 @@
 class BlindDate < ApplicationRecord
 	before_save :set_meeting_date
   before_create :choose_leader
+  after_save :send_email, if: :saved_change_to_location?
 
   scope :last_meeting_groups, -> { where(meeting_date: DateTime.now.utc.beginning_of_day.prev_occurring(:friday)) }
   scope :next_meeting_groups, -> { where(meeting_date: DateTime.now.utc.beginning_of_day.next_occurring(:friday)) }
@@ -59,5 +60,9 @@ class BlindDate < ApplicationRecord
       result[x.name] = x.employees.opt_in_employees.ids
     end
     result
+  end
+
+  def send_email
+    EmployeeMailer.with(blind_date: self).fun_friday.deliver_later
   end
 end
