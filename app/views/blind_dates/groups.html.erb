@@ -1,0 +1,21 @@
+<%= link_to "Go Back", root_path %><br>
+<div>
+  Welcome to Meeting-Groups !
+</div>
+
+<div>
+  <% if @new_blind_dates.present? %>
+    <%= render partial: "new_blind_dates", locals: {new_blind_dates: @new_blind_dates}%>
+  <% else %>
+    Please click the below button to form groups
+    <br>
+    <strong> Only <%= @respondees_count %> out of <%= @total_emps_count %> have responded </strong>
+    <% if get_response_ratio(@respondees_count, @total_emps_count) > 75 || is_thursday? %>
+      <%= button_to 'Fire New Groups', blind_dates_path, method: :post, style: "margin-top: 10px" %>
+    <% else %>
+      <p>In order to create groups, either the respondee ratio has to be greater than 75% or it has to be thursday</p>
+    <% end %>
+  <% end %>
+</div>
+
+<%= render partial: "prev_blind_dates", locals: {previous_blind_dates: @previous_blind_dates}%>

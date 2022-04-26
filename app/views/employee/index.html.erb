@@ -1,0 +1,18 @@
+<%= link_to "Go Back", root_path %><br>
+
+List of Employees <br>
+<row style="padding-right: 50px;">
+  Name ||||||| Opted In
+<% @employee.each_with_index do |employee, i| %>
+  <% if (i % 5 == 0) %>
+  	<br>
+  <% end %>
+  <column style="padding-right: 35px;">
+    <%= employee.name %> 
+  </column>
+  <column>
+    <%= employee.opt_in %>
+  </column>
+    <br>
+<% end %>
+</row>

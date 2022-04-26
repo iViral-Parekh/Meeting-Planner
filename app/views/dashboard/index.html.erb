@@ -1,0 +1,60 @@
+<div>
+  Welcome to Meeting-Groups !
+</div>
+
+<div>
+  <% if current_employee %>
+    Hello, <%= current_employee.name %><br><br>
+    Click here to get the List of all Employees :<br>
+    <%= link_to "All Employees", employee_index_path %><br>
+    <% if is_admin?(current_employee) %>
+      Check out Blind Dates :<br>
+      <%= link_to "Blind Dates", groups_blind_dates_path %><br>
+    <% end %>
+    <table>
+      <tr>
+      <td>
+        <p>You have successfully logged in</p>
+      </td>
+      <td style="float: right;">  
+        <%= link_to "Sign Out", destroy_employee_session_path, 'data-turbo-method': :delete, style: 'float: right; margin: 10px' %>
+      </td>
+    </table>
+
+    <br><br>
+      <% if get_blind_date_data && @blind_date %>
+       <p> Please be present on <%= @blind_date.meeting_date.strftime("%B %d, %Y")%><br> 
+        Venue: <%= @blind_date.location || "Not yet decided" %>
+      <% else %>
+        You have "<%= current_employee.opt_in.present? ? (current_employee.opt_in ? "Opted In" : "Opted Out") : "Not Responded" %>" for Lunch Party
+        <p>Would you like to be a part of next friday's lunch ?<p>
+        <%= form_with url: employee_opt_in_path(current_employee), method: :post do |form|%>
+          <%= form.radio_button :opt_in, true %>
+          <%= form.label :opt_in_true, "Count me In !" %>
+          <%= form.radio_button :opt_in, false %>
+          <%= form.label :opt_in_false, "I would pass" %>
+          <br>
+          <%= form.submit "Save" %>
+        <% end %>
+      <% end %>
+
+    <% if is_leader?(current_employee.id) %>
+      <p><strong>You are the leader of one of the group</strong></p>
+      <% if current_employee.blind_date.first.location %>
+        <p>The meeting is suppose to happen at <strong><%= current_employee.blind_date.first.location %></strong>, on <%= current_employee.blind_date.first.meeting_date.strftime("%B %d, %Y") %></p>
+      <% else %>
+        <p> Please select location </p>
+      <% end %>
+        <%= form_with url: blind_date_path(current_employee.blind_date.first.id), method: :patch do |form|%>
+          <%= form.label :location, "Update Restaurant for the Lunch Party ?" %>
+          <%= form.text_field :location %>
+          <%= form.submit "Save" %>
+        <% end %>
+    <% end %>
+    
+  <% else %>
+    <p> You have not logged in</p>
+    <%= link_to "Sign Up!", new_employee_registration_path %><br>
+    <%= link_to "Log In!", new_employee_session_path %>
+  <% end %>
+</div>

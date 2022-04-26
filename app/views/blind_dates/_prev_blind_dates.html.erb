@@ -1,0 +1,32 @@
+<div style="padding-top: 10%;">
+  <strong> Previous Friday's Blind Dates </strong>
+</div>
+
+<div style="padding-top: 2%">
+  <br>
+	<row>
+  	<% previous_blind_dates.each_with_index do |group, i| %>
+  		<col>
+  			<strong> 
+          =========================================<br>
+          <h3 style="padding-left: 100px"><%= "Group #{i + 1}" %> </h3>
+        </strong>
+  			<table style="border: 1px solid; border-collapse: collapse; padding: 5px;">
+          <tbody>
+    				<th style="border: 1px solid; text-align: left; padding: 5px;"> Employee ID </th>
+    				<th style="border: 1px solid; text-align: left; padding: 5px;"> Employee Name </th>
+    				<th style="border: 1px solid; text-align: left; padding: 5px;"> Team Name </th>
+    				<% group.each do |e| %>
+    				  <tr style="background-color: <%= "red" if @prev_leaders.include?(e.id) %>">
+    				  	<td style="border: 1px solid; padding: 5px;"> <%= e.id %></td>
+    				  	<td style="border: 1px solid; padding: 5px;"> <%= e.name %></td>
+    				  	<td style="border: 1px solid; padding: 5px;"> <%= e.team_name %> </td>
+    				  </tr>
+    				<% end %>
+          </tbody>
+  			</table>
+  		</col>
+      <br><br>
+  	<% end %>
+  </row>
+</div>
